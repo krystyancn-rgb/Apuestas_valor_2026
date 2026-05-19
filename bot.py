@@ -1,47 +1,30 @@
 import requests
-import time
+import os
 
 TOKEN = "AAG-tVM3PFVjxapQTdYRjD2yvGTCKcmqnKo"
-URL = f"https://api.telegram.org/bot{TOKEN}"
+URL = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 
 def send_message(chat_id, text):
-    requests.get(f"{URL}/sendMessage", params={
+    requests.post(URL, data={
         "chat_id": chat_id,
         "text": text
     })
 
-def get_updates(offset=None):
-    params = {"timeout": 10}
-    if offset:
-        params["offset"] = offset
-
-    try:
-        r = requests.get(f"{URL}/getUpdates", params=params, timeout=15)
-        return r.json()
-    except:
-        return {"result": []}
-
+def get_updates():
+    url = f"https://api.telegram.org/bot{TOKEN}/getUpdates"
+    return requests.get(url).json()
 
 def main():
-    print("Bot iniciado...")
-    offset = None
+    print("Bot iniciado")
 
-    while True:
-        data = get_updates(offset)
+    data = get_updates()
 
-        for update in data.get("result", []):
-            offset = update["update_id"] + 1
-
+    if data.get("result"):
+        for update in data["result"]:
             if "message" in update:
                 chat_id = update["message"]["chat"]["id"]
-                text = update["message"].get("text", "")
 
-                print("Mensaje recibido:", text)
-
-                send_message(chat_id, "👋 Bot activo. Funcionando correctamente.")
-
-        time.sleep(2)
-
+                send_message(chat_id, "👋 Bot activo. Funciona correctamente en Render.")
 
 if __name__ == "__main__":
     main()
