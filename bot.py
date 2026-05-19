@@ -1,7 +1,7 @@
 import requests
 import time
 
-TOKEN = AAG-tVM3PFVjxapQTdYRjD2yvGTCKcmqnKo
+TOKEN = tVM3PFVjxapQTdYRjD2yvGTCKcmqnKo
 URL = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 
 CHAT_ID = None
